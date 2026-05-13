@@ -380,7 +380,10 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--txt);font
   <div class="prog-wrap">
     <div class="prog-hdr">
       <div class="prog-logo">Progrès</div>
-      <button class="btn-exp" onclick="doExport()">Export</button>
+      <div style="display:flex;gap:8px">
+        <button class="btn-exp" onclick="doExport()">Export</button>
+        <button class="btn-exp" style="color:var(--red);border-color:rgba(239,68,68,.3)" onclick="resetAll()">Reset</button>
+      </div>
     </div>
     <div class="stat-grid" id="stat-grid"></div>
     <div class="prog-sec">Pompes — max reps</div>
@@ -922,6 +925,16 @@ function renderProg(){
       return`<div class="h-item"><div><div class="h-main">Séance ${l.type} · ${PH[l.ph-1]} S${l.wip}</div><div class="h-sub">${d} · ${l.dur}min${tv?' · '+tv+' reps':''}</div></div><div style="color:var(--t3)">›</div></div>`;
     }).join(''):
     '<div style="text-align:center;padding:28px 0;font-size:14px;color:var(--t2)">Aucune séance</div>';
+}
+
+function resetAll(){
+  if(!confirm('Effacer toutes les données ? (séances + GTG)\nCette action est irréversible.')) return;
+  localStorage.removeItem('im9');
+  localStorage.removeItem('gtg_log');
+  localStorage.removeItem('gtg_state');
+  db={log:[]}; gtgLocalLog=[]; gtgState={...GTG_DEFAULT};
+  toast('Données effacées ✓');
+  renderProg();
 }
 
 function doExport(){
